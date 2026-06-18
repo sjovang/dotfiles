@@ -1,0 +1,13 @@
+Host *
+  UseKeychain yes
+  AddKeysToAgent yes
+{{- if .git.includes }}
+{{- range .git.includes }}
+{{- range $id, $config := . }}
+{{- if hasKey $config "ssh_key" }}
+  IdentityFile {{ $config.ssh_key }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+  SetEnv TERM=xterm-256color
