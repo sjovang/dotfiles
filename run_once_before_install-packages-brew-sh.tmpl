@@ -15,6 +15,9 @@ brew "pre-commit"
 brew "pwgen"
 brew "starship"
 brew "tree"
+{{- if .wireguard.enabled }}
+brew "wireguard-tools"
+{{- end }}
 cask "bitwarden"
 cask "copilot-cli"
 cask "discord"

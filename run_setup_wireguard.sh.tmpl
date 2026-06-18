@@ -1,0 +1,69 @@
+#!/bin/bash
+{{- if .wireguard.enabled }}
+
+set -e
+
+# Create wireguard config directory
+mkdir -p /opt/homebrew/etc/wireguard
+chmod 700 /opt/homebrew/etc/wireguard
+
+PRIVATE_KEY_FILE="/opt/homebrew/etc/wireguard/.private.key"
+CONFIG_FILE="/opt/homebrew/etc/wireguard/wg0.conf"
+
+# Generate private key if it doesn't exist
+KEY_IS_NEW=false
+if [ ! -f "$PRIVATE_KEY_FILE" ]; then
+  echo "Generating WireGuard private key..." >&2
+  wg genkey > "$PRIVATE_KEY_FILE"
+  chmod 600 "$PRIVATE_KEY_FILE"
+  KEY_IS_NEW=true
+fi
+
+# Read the private key
+PRIVATE_KEY=$(cat "$PRIVATE_KEY_FILE")
+
+# Create wg0.conf with generated private key
+cat > "$CONFIG_FILE" << 'WGEOF'
+[Interface]
+PrivateKey = PLACEHOLDER_PRIVATE_KEY
+{{- if .wireguard.interface.address }}
+Address = {{ .wireguard.interface.address }}
+{{- end }}
+{{- if hasKey .wireguard.interface "dns" }}
+{{- if .wireguard.interface.dns }}
+DNS = {{ .wireguard.interface.dns }}
+{{- end }}
+{{- end }}
+
+{{- range .wireguard.peers }}
+
+[Peer]
+PublicKey = {{ .public_key }}
+{{- if .endpoint }}
+Endpoint = {{ .endpoint }}
+{{- end }}
+{{- if .allowed_ips }}
+AllowedIPs = {{ .allowed_ips }}
+{{- end }}
+{{- if .persistent_keepalive }}
+PersistentKeepalive = {{ .persistent_keepalive }}
+{{- end }}
+{{- end }}
+WGEOF
+
+# Replace placeholder with actual private key
+sed -i '' "s|PLACEHOLDER_PRIVATE_KEY|$PRIVATE_KEY|g" "$CONFIG_FILE"
+chmod 600 "$CONFIG_FILE"
+
+# Print public key only if key was newly generated
+if [ "$KEY_IS_NEW" = true ]; then
+  PUBLIC_KEY=$(cat "$PRIVATE_KEY_FILE" | wg pubkey)
+  echo "WireGuard configuration created at $CONFIG_FILE" >&2
+  echo "Public key: $PUBLIC_KEY" >&2
+  echo "Add this public key to your WireGuard peer configuration on the server" >&2
+fi
+
+{{- end }}
+
+
+
