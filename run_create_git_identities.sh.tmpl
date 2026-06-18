@@ -1,0 +1,25 @@
+{{- if .git.includes -}}
+#!/bin/bash
+mkdir -p ~/.config/git
+
+{{ range .git.includes -}}
+  {{ range $id, $config := . -}}
+cat <<EOF > ~/.config/git/{{ $id }}.gitconfig
+[core]
+    sshCommand = ssh -i {{ $config.ssh_key }}
+
+[user]
+    {{- if hasKey $config "name" }}
+    name = {{ $config.name }}
+    {{- else }}
+    name = {{ $.user.name }}
+    {{- end }}
+    {{- if hasKey $config "email" }}
+    email = {{ $config.email }}
+    {{- else }}
+    email = {{ $.user.email }}
+    {{- end }}
+EOF
+  {{ end }}
+{{ end }}
+{{ end }}

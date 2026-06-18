@@ -1,0 +1,30 @@
+{{- if lookPath "brew" -}}
+#!/bin/bash
+
+export HOMEBREW_NO_ENV_HINTS=1
+
+brew bundle --file=/dev/stdin <<EOF
+{{ if eq .chezmoi.os "darwin" -}}
+brew "direnv"
+brew "eza"
+brew "fzf"
+brew "gh"
+brew "htop"
+brew "neovim"
+brew "pre-commit"
+brew "pwgen"
+brew "starship"
+brew "tree"
+cask "bitwarden"
+cask "copilot-cli"
+cask "discord"
+cask "font-monaspace"
+cask "font-monaspace-var"
+cask "ghostty"
+cask "github-copilot-app"
+cask "visual-studio-code"
+{{ end -}}
+EOF
+
+brew completions link
+{{ end -}}

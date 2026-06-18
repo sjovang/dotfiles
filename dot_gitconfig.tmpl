@@ -1,0 +1,26 @@
+[core]
+  ignorecase = false
+
+{{ if .git.includes -}}
+  {{- $hasPrivate := false -}}
+  {{- range .git.includes -}}
+    {{- if hasKey . "private" -}}
+      {{- $hasPrivate = true -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- if $hasPrivate -}}
+  [include]
+    path = ~/.config/git/gitconfig.private
+  {{- end }}
+  {{ range .git.includes }}
+    {{- range $id, $config := . }}
+    [includeIf "gitdir:{{ $config.path }}/.git"]
+      path = ~/.config/git/{{ $id }}.gitconfig
+    {{ end }}
+  {{- end -}}
+{{- end }}
+
+[user]
+  name = {{ .user.name | quote }}
+  email = {{ .user.email | quote }}

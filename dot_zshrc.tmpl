@@ -1,0 +1,25 @@
+{{ if eq .chezmoi.os "darwin" -}}
+
+{{- if lookPath "starship" }}
+eval "$(starship init zsh)"
+{{ end -}}
+
+{{- if lookPath "direnv" }}
+eval "$(direnv hook zsh)"
+{{ end -}}
+
+{{- if lookPath "eza" }}
+alias ls="eza"
+{{ end -}}
+
+{{- if lookPath "fzf" }}
+source <(fzf --zsh)
+{{ end -}}
+
+{{- if lookPath "nvim" }}
+alias vi="nvim"
+{{ end -}}
+
+ssh-add --apple-load-keychain -q
+
+{{- end }}

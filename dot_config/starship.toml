@@ -1,0 +1,19 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+[azure]
+disabled = false
+format = "[$symbol($username: $subscription)]($style) "
+
+[character]
+success_symbol = '[➜](bold green)'
+
+#[direnv]
+#disabled = false
+
+[terraform]
+format = 'via [$symbol$version $workspace]($style) '
+
+[time]
+disabled = false
+format = '[$time]($style) '
+time_format = '%H:%M'
