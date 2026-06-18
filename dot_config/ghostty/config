@@ -21,3 +21,6 @@ font-family = "Monaspace Neon"
 font-size = 14
 
 keybind = global:shift+escape=toggle_quick_terminal
+
+quit-after-last-window-closed = true
+confirm-close-surface = false
