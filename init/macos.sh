@@ -6,6 +6,7 @@ DEFAULT_DOTFILES_REPO_URL="https://codeberg.org/liasis/dotfiles.git"
 DOTFILES_REPO_URL="${1:-$DEFAULT_DOTFILES_REPO_URL}"
 CHEZMOI_SOURCE_DIR="$HOME/.local/share/chezmoi"
 CHEZMOI_DATA_FILE="$CHEZMOI_SOURCE_DIR/.chezmoidata.yaml"
+CHEZMOI_DATA_BACKUP_FILE=""
 
 info() {
   echo "==> $1"
@@ -84,6 +85,14 @@ EOF
   info "Created $CHEZMOI_DATA_FILE"
 }
 
+precheck_chezmoidata() {
+  if [ -f "$CHEZMOI_DATA_FILE" ]; then
+    info "Precheck: found $CHEZMOI_DATA_FILE"
+  else
+    info "Precheck: missing $CHEZMOI_DATA_FILE (it will be created after chezmoi init)"
+  fi
+}
+
 # Install xcode CLI tools (pre-req for homebrew)
 info "Checking Xcode Command Line Tools"
 if xcode-select -p 2>&1 | grep -q "error: Unable to get active developer"; then
@@ -120,10 +129,37 @@ else
   info "chezmoi already installed"
 fi
 
+# Precheck data file early, but only create it after chezmoi init.
+precheck_chezmoidata
+
 # Initialize dotfiles with chezmoi early, before reading chezmoidata.
 if [ ! -d "$CHEZMOI_SOURCE_DIR/.git" ]; then
+  if [ -f "$CHEZMOI_DATA_FILE" ]; then
+    info "Temporarily moving existing $CHEZMOI_DATA_FILE to avoid init conflicts"
+    CHEZMOI_DATA_BACKUP_FILE="$(mktemp "${TMPDIR:-/tmp}/chezmoidata.XXXXXX")" || { error "Could not create temporary backup file"; exit 1; }
+    cp "$CHEZMOI_DATA_FILE" "$CHEZMOI_DATA_BACKUP_FILE" || { error "Could not backup $CHEZMOI_DATA_FILE"; exit 1; }
+    rm "$CHEZMOI_DATA_FILE" || { error "Could not temporarily remove $CHEZMOI_DATA_FILE"; exit 1; }
+  fi
+
   info "Initializing chezmoi source from $DOTFILES_REPO_URL"
-  chezmoi init "$DOTFILES_REPO_URL" || { error "chezmoi init failed"; exit 1; }
+  if ! chezmoi init "$DOTFILES_REPO_URL"; then
+    if [ -n "$CHEZMOI_DATA_BACKUP_FILE" ] && [ -f "$CHEZMOI_DATA_BACKUP_FILE" ]; then
+      mkdir -p "$CHEZMOI_SOURCE_DIR"
+      mv "$CHEZMOI_DATA_BACKUP_FILE" "$CHEZMOI_DATA_FILE"
+    fi
+    error "chezmoi init failed"
+    exit 1
+  fi
+
+  if [ -n "$CHEZMOI_DATA_BACKUP_FILE" ] && [ -f "$CHEZMOI_DATA_BACKUP_FILE" ]; then
+    if [ -f "$CHEZMOI_DATA_FILE" ]; then
+      info "$CHEZMOI_DATA_FILE already exists after init. Keeping initialized file"
+      rm -f "$CHEZMOI_DATA_BACKUP_FILE"
+    else
+      mv "$CHEZMOI_DATA_BACKUP_FILE" "$CHEZMOI_DATA_FILE"
+      info "Restored pre-existing $CHEZMOI_DATA_FILE after init"
+    fi
+  fi
 else
   info "chezmoi source already initialized at $CHEZMOI_SOURCE_DIR"
 fi
