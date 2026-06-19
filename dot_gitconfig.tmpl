@@ -11,7 +11,7 @@
 
   {{- if $hasPrivate -}}
   [include]
-    path = ~/.config/git/gitconfig.private
+    path = ~/.config/git/private.gitconfig
   {{- end }}
   {{ range .git.includes }}
     {{- range $id, $config := . }}
