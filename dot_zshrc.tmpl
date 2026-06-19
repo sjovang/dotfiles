@@ -43,4 +43,11 @@ wireguard() {
 
 ssh-add --apple-load-keychain -q
 
+{{- if stat "/opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh" }}
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+{{- end }}
+
+{{- if stat "/opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" }}
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+{{- end }}
 {{- end }}
