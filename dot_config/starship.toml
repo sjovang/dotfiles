@@ -20,6 +20,13 @@ format = '[$symbol($username: $subscription)]($style) '
 [character]
 success_symbol = '[➜](bold green)'
 
+[direnv]
+disabled = false
+symbol = ''
+format = '[$symbol $loaded]($style) '
+loaded_msg = '✓'
+unloaded_msg = 'x'
+
 [fill]
 symbol = ' '
 
