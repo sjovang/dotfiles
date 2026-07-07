@@ -6,12 +6,15 @@ export HOMEBREW_NO_ENV_HINTS=1
 brew bundle --file=/dev/stdin <<EOF
 {{ if eq .chezmoi.os "darwin" -}}
 brew "azure-cli"
+brew "container"
 brew "direnv"
 brew "eza"
 brew "fzf"
 brew "gh"
 brew "htop"
+brew "mise"
 brew "neovim"
+brew "npm"
 brew "pre-commit"
 brew "pwgen"
 brew "starship"

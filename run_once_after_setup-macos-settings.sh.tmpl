@@ -1,0 +1,20 @@
+#!/bin/zsh
+{{- if eq .chezmoi.os "darwin" }}
+# echo "🍏 configure macOS defaults"
+
+# Screenshots
+mkdir -p ~/Documents/Screenshots
+defaults write com.apple.screencapture location-screenrecording "~/Documents/Screenshots"
+defaults write com.apple.screencapture location-screenshot "~/Documents/Screenshots"
+
+# Get rid of natural scrolling
+defaults write -g com.apple.swipescrolldirection -bool false
+
+# Dock
+defaults write com.apple.dock "tilesize" -int 32
+defaults write com.apple.dock "autohide" -bool true
+defaults write com.apple.dock "show-recents" -bool false
+defaults write com.apple.dock "mineffect" -string "scale"
+defaults write com.apple.dock "static-only" -bool true
+killall Dock
+{{ end -}}

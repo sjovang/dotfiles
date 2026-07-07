@@ -1,6 +1,8 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 command_timeout = 2000
+format = """$time$directory$character"""
+right_format = """$all"""
 
 [azure]
 disabled = false
@@ -12,6 +14,9 @@ success_symbol = '[➜](bold green)'
 #[direnv]
 #disabled = false
 
+[git_branch]
+format = '[$symbol$branch]($style) '
+
 [terraform]
 format = 'via [$symbol$version $workspace]($style) '
 
@@ -19,3 +24,4 @@ format = 'via [$symbol$version $workspace]($style) '
 disabled = false
 format = '[$time]($style) '
 time_format = '%H:%M'
+
