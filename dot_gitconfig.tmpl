@@ -21,6 +21,31 @@
   {{- end -}}
 {{- end }}
 
+[alias]
+  s = status -sb
+  l = log --oneline --graph --decorate -20
+
+[core]
+  excludesfile = ~/.gitignore
+  {{- if lookPath "delta" }}
+  pager = delta
+  {{ end -}}
+
+{{- if lookPath "delta" }}
+[delta]
+  side-by-side = true
+  line-numbers = true
+{{ end -}}
+
+[diff]
+  algorithm = histogram
+
+[init]
+  defaultBranch = main
+
+[push]
+  autoSetupRemote = true
+
 [user]
   name = {{ .user.name | quote }}
   email = {{ .user.email | quote }}

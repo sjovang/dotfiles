@@ -1,0 +1,15 @@
+{{- if eq .chezmoi.os "darwin" }}
+.DS_Store
+.DS_Store?
+.Spotlight-V100
+.Trashes
+._*
+Thumbs.db
+ehthumbs.db
+{{ end }}
+
+# build artifacts
+node_modules
+
+# environment files
+.env
