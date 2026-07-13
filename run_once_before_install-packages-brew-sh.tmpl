@@ -3,6 +3,11 @@
 
 export HOMEBREW_NO_ENV_HINTS=1
 
+# Setup thirdparty taps for terraform
+brew tap "terraform-linters/tap"
+brew trust terraform-linters/tap
+
+# Install packages
 brew bundle --file=/dev/stdin <<EOF
 {{ if eq .chezmoi.os "darwin" -}}
 brew "azure-cli"
@@ -12,6 +17,7 @@ brew "eza"
 brew "fzf"
 brew "gh"
 brew "git-delta"
+brew "gitleaks"
 brew "htop"
 brew "mise"
 brew "neovim"
@@ -19,6 +25,9 @@ brew "npm"
 brew "pre-commit"
 brew "pwgen"
 brew "starship"
+brew "terraform-docs"
+brew "tenv"
+cask "tflint"
 brew "tree"
 brew "uv"
 {{- if .wireguard.enabled }}
