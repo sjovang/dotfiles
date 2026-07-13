@@ -20,6 +20,22 @@ source <(fzf --zsh)
 alias vi="nvim"
 {{ end -}}
 
+{{- if lookPath "pre-commit" }}
+{{- if lookPath "yq" }}
+precommit-merge-config() {
+  local global="$HOME/.config/.pre-commit-config.yaml"
+  local local_cfg=".pre-commit-config.local.yaml"
+  local out=".pre-commit-config.yaml"
+
+  if [[ -f "$local_cfg" ]]; then
+    yq eval-all '. as $item ireduce ({}; . * $item)' "$global" "$local_cfg" > "$out"
+  else
+    cp "$global" "$out"
+  fi
+}
+{{ end -}}
+{{ end -}}
+
 {{- if .wireguard.enabled }}
 {{- if lookPath "wg-quick" }}
 wireguard() {
