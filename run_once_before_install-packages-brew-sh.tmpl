@@ -31,9 +31,6 @@ cask "tflint"
 brew "tree"
 brew "uv"
 brew "yq"
-{{- if .wireguard.enabled }}
-brew "wireguard-tools"
-{{- end }}
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
 cask "bitwarden"
@@ -43,7 +40,14 @@ cask "font-monaspace"
 cask "font-monaspace-var"
 cask "ghostty"
 cask "github-copilot-app"
+{{- if and (hasKey . "microsoft_tools") .microsoft_tools }}
+cask "onedrive"
+cask "microsoft-teams"
+{{- end }}
 cask "visual-studio-code"
+{{- if .wireguard.enabled }}
+brew "wireguard-tools"
+{{- end }}
 {{ end -}}
 EOF
 
