@@ -1,5 +1,34 @@
+[alias]
+  s = status -sb
+  l = log --oneline --graph --decorate -20
+
+[credential]
+{{- if eq .chezmoi.os "darwin" }}
+  helper = osxkeychain
+{{- else if eq .chezmoi.os "linux" }}
+  helper = cache
+{{- end }}
+
 [core]
   ignorecase = false
+  excludesfile = ~/.gitignore
+  {{- if lookPath "delta" }}
+  pager = delta
+  {{ end -}}
+
+[diff]
+  algorithm = histogram
+
+[init]
+  defaultBranch = main
+  templateDir = ~/.config/git/template
+
+[push]
+  autoSetupRemote = true
+
+[user]
+  name = {{ .user.name | quote }}
+  email = {{ .user.email | quote }}
 
 {{ if .git.includes -}}
   {{- $hasPrivate := false -}}
@@ -21,15 +50,6 @@
   {{- end -}}
 {{- end }}
 
-[alias]
-  s = status -sb
-  l = log --oneline --graph --decorate -20
-
-[core]
-  excludesfile = ~/.gitignore
-  {{- if lookPath "delta" }}
-  pager = delta
-  {{ end -}}
 
 {{- if lookPath "delta" }}
 [delta]
@@ -37,16 +57,3 @@
   line-numbers = true
 {{ end -}}
 
-[diff]
-  algorithm = histogram
-
-[init]
-  defaultBranch = main
-  templateDir = ~/.config/git/template
-
-[push]
-  autoSetupRemote = true
-
-[user]
-  name = {{ .user.name | quote }}
-  email = {{ .user.email | quote }}
