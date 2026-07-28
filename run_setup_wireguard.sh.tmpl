@@ -1,5 +1,5 @@
 #!/bin/bash
-{{- if .wireguard.enabled }}
+{{- if (dig "utils" "wireguard" false .) }}
 
 set -e
 
@@ -26,16 +26,16 @@ PRIVATE_KEY=$(cat "$PRIVATE_KEY_FILE")
 cat > "$CONFIG_FILE" << 'WGEOF'
 [Interface]
 PrivateKey = PLACEHOLDER_PRIVATE_KEY
-{{- if .wireguard.interface.address }}
-Address = {{ .wireguard.interface.address }}
+{{- if .utils.wireguard.interface.address }}
+Address = {{ .utils.wireguard.interface.address }}
 {{- end }}
-{{- if hasKey .wireguard.interface "dns" }}
-{{- if .wireguard.interface.dns }}
-DNS = {{ .wireguard.interface.dns }}
+{{- if hasKey .utils.wireguard.interface "dns" }}
+{{- if .utils.wireguard.interface.dns }}
+DNS = {{ .utils.wireguard.interface.dns }}
 {{- end }}
 {{- end }}
 
-{{- range .wireguard.peers }}
+{{- range .utils.wireguard.peers }}
 
 [Peer]
 PublicKey = {{ .public_key }}
@@ -64,6 +64,4 @@ if [ "$KEY_IS_NEW" = true ]; then
 fi
 
 {{- end }}
-
-
 

@@ -10,7 +10,6 @@ brew trust terraform-linters/tap
 # Install packages
 brew bundle --file=/dev/stdin <<EOF
 {{ if eq .chezmoi.os "darwin" -}}
-brew "azure-cli"
 brew "container"
 brew "direnv"
 brew "eza"
@@ -25,29 +24,42 @@ brew "npm"
 brew "pre-commit"
 brew "pwgen"
 brew "starship"
-brew "terraform-docs"
-brew "tenv"
-cask "tflint"
 brew "tree"
 brew "uv"
 brew "yq"
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
 cask "bitwarden"
-cask "copilot-cli"
 cask "discord"
 cask "font-monaspace"
 cask "font-monaspace-var"
 cask "ghostty"
-cask "github-copilot-app"
 cask "obsidian"
-{{- if and (hasKey . "microsoft_tools") .microsoft_tools }}
+{{- if (dig "utils" "ai" false .) }}
+cask "copilot-cli"
+cask "github-copilot-app"
+brew "opencode"
+cask "opencode-desktop"
+{{- end }}
+{{- if (dig "utils" "azure" false .) }}
+brew "azure-cli"
+{{- end }}
+{{- if (dig "utils" "kubernetes" false .) }}
+brew "k9s"
+brew "kubectl"
+{{- end }}
+{{- if (dig "utils" "microsoft" false .) }}
 cask "onedrive"
 cask "microsoft-outlook"
 cask "microsoft-teams"
-{{- end }}
 cask "visual-studio-code"
-{{- if .wireguard.enabled }}
+{{- end }}
+{{- if (dig "utils" "terraform" false .) }}
+brew "terraform-docs"
+brew "tenv"
+cask "tflint"
+{{- end }}
+{{- if (dig "utils" "wireguard" false .) }}
 brew "wireguard-tools"
 {{- end }}
 {{ end -}}

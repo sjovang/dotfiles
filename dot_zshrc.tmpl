@@ -36,7 +36,7 @@ precommit-merge-config() {
 {{ end -}}
 {{ end -}}
 
-{{- if .wireguard.enabled }}
+{{- if (dig "utils" "wireguard" false .) }}
 {{- if lookPath "wg-quick" }}
 wireguard() {
   case "$1" in

@@ -27,16 +27,22 @@ git:
         path: ~/Developer/Private
         ssh_key: ~/.ssh/id_ed25519
 
-wireguard:
-  enabled: true
-  interface:
-    address: "10.0.0.2/24"
-    dns: "10.0.0.1"
-  peers:
-    - public_key: "peer_public_key_here"
-      endpoint: "vpn.example.com:51820"
-      allowed_ips: "10.0.0.0/24"
-      persistent_keepalive: 25
+utils:
+    ai: false
+    azure: false
+    kubernetes: false
+    micrososft: false
+    terraform: false
+
+    wireguard:
+      interface:
+        address: "10.0.0.2/24"
+        dns: "10.0.0.1"
+      peers:
+        - public_key: "peer_public_key_here"
+          endpoint: "vpn.example.com:51820"
+          allowed_ips: "10.0.0.0/24"
+          persistent_keepalive: 25
 ```
 
 ### How to use
