@@ -36,10 +36,14 @@ cask "font-monaspace-var"
 cask "ghostty"
 cask "obsidian"
 {{- if (dig "utils" "ai" false .) }}
+brew "aider"
 cask "copilot-cli"
 cask "github-copilot-app"
 brew "opencode"
 cask "opencode-desktop"
+brew "mlx"
+brew "mlx-lm"
+brew "rtk"
 {{- end }}
 {{- if (dig "utils" "azure" false .) }}
 brew "azure-cli"
