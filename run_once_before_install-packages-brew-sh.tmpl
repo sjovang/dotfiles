@@ -4,8 +4,8 @@
 export HOMEBREW_NO_ENV_HINTS=1
 
 {{- if (dig "utils" "terraform" false .) }}
-if ! brew tap-info terraform-linters/tap | grep -q "Trusted"; then
-    echo "Tap is not trusted. Requesting trust for tflint..."
+if ! brew trust | grep -q "terraform-linters/tap/tflint"; then
+    echo "Tap/Cask is not trusted. Requesting trust for tflint..."
     brew trust --cask terraform-linters/tap/tflint
 fi
 {{- end }}

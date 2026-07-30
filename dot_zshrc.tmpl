@@ -36,6 +36,10 @@ precommit-merge-config() {
 {{ end -}}
 {{ end -}}
 
+{{- if (dig "utils" "kubernetes" false .) }}
+alias k="kubectl"
+{{ end -}}
+
 {{- if (dig "utils" "wireguard" false .) }}
 {{- if lookPath "wg-quick" }}
 wireguard() {
