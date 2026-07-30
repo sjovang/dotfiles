@@ -55,6 +55,7 @@ brew "azure-cli"
 {{- if (dig "utils" "kubernetes" false .) }}
 brew "k9s"
 brew "kubectl"
+brew "lima"
 {{- end }}
 {{- if (dig "utils" "microsoft" false .) }}
 cask "onedrive"
