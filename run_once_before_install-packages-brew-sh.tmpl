@@ -3,9 +3,19 @@
 
 export HOMEBREW_NO_ENV_HINTS=1
 
-# Setup thirdparty taps for terraform
-brew tap "terraform-linters/tap"
-brew trust terraform-linters/tap
+{{- if (dig "utils" "kubernetes" false .) }}
+if ! brew tap-info saiyam1814/tap | grep -q "Trusted"; then
+    echo "Tap is not trusted. Requesting trust for kiac..."
+    brew trust --formula saiyam1814/tap/kiac
+fi
+{{- end }}
+
+{{- if (dig "utils" "terraform" false .) }}
+if ! brew tap-info terraform-linters/tap | grep -q "Trusted"; then
+    echo "Tap is not trusted. Requesting trust for tflint..."
+    brew trust --cask terraform-linters/tap/tflint
+fi
+{{- end }}
 
 # Install packages
 brew bundle --file=/dev/stdin <<EOF
@@ -52,6 +62,7 @@ brew "azure-cli"
 {{- if (dig "utils" "kubernetes" false .) }}
 brew "k9s"
 brew "kubectl"
+brew "saiyam1814/tap/kiac"
 {{- end }}
 {{- if (dig "utils" "microsoft" false .) }}
 cask "onedrive"
