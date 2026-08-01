@@ -50,6 +50,7 @@ brew "mlx-lm"
 brew "rtk"
 {{- end }}
 {{- if (dig "utils" "azure" false .) }}
+brew "azd"
 brew "azure-cli"
 {{- end }}
 {{- if (dig "utils" "kubernetes" false .) }}
