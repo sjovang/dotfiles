@@ -74,6 +74,7 @@ brew "azd"
 brew "azure-cli"
 {{- end }}
 {{- if (dig "utils" "kubernetes" false .) }}
+brew "crossplane"
 brew "k9s"
 brew "kubectl"
 brew "helm"
