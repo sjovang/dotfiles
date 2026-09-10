@@ -5,8 +5,20 @@ export HOMEBREW_NO_ENV_HINTS=1
 
 {{- if (dig "utils" "terraform" false .) }}
 if ! brew trust | grep -q "terraform-linters/tap/tflint"; then
-    echo "Tap/Cask is not trusted. Requesting trust for tflint..."
     brew trust --cask terraform-linters/tap/tflint
+fi
+{{- end }}
+
+
+{{- if (dig "utils" "kubernetes" false .) }}
+if ! brew trust | grep -q "libkrun/krun"; then
+    brew trust libkrun/krun
+fi
+if ! brew trust | grep -q "nirs/vmnet-helper"; then
+    brew trust /nirs/vmnet-helper
+fi
+if ! brew trust | grep -q "saiyam1814/tap/kiac"; then
+    brew trust --cask saiyam1814/tap/kiac
 fi
 {{- end }}
 
@@ -57,7 +69,11 @@ brew "azure-cli"
 {{- if (dig "utils" "kubernetes" false .) }}
 brew "k9s"
 brew "kubectl"
-brew "lima"
+brew "helm"
+brew "fluxcd/tap/flux"
+cask "saiyam1814/tap/kiac"
+brew "krunkit"
+brew "vmnet-helper"
 {{- end }}
 {{- if (dig "utils" "microsoft" false .) }}
 cask "onedrive"
@@ -68,7 +84,7 @@ cask "visual-studio-code"
 {{- if (dig "utils" "terraform" false .) }}
 brew "terraform-docs"
 brew "tenv"
-cask "tflint"
+brew "tflint"
 {{- end }}
 {{- if (dig "utils" "wireguard" false .) }}
 brew "wireguard-tools"
