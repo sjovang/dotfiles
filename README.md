@@ -31,7 +31,7 @@ utils:
     ai: false
     azure: false
     kubernetes: false
-    micrososft: false
+    microsoft: false
     terraform: false
 
     wireguard:
