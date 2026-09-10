@@ -11,11 +11,17 @@ fi
 
 
 {{- if (dig "utils" "kubernetes" false .) }}
+brew tap libkrun/krun
+brew tap nirs/vmnet-helper
+
+if ! brew trust | grep -q "fluxcd/tap"; then
+    brew trust fluxcd/tap
+fi
 if ! brew trust | grep -q "libkrun/krun"; then
     brew trust libkrun/krun
 fi
 if ! brew trust | grep -q "nirs/vmnet-helper"; then
-    brew trust /nirs/vmnet-helper
+    brew trust nirs/vmnet-helper
 fi
 if ! brew trust | grep -q "saiyam1814/tap/kiac"; then
     brew trust --cask saiyam1814/tap/kiac
@@ -56,6 +62,7 @@ cask "ungoogled-chromium"
 brew "aider"
 cask "copilot-cli"
 cask "github-copilot-app"
+brew "herdr"
 brew "opencode"
 cask "opencode-desktop"
 brew "mlx"
@@ -84,7 +91,6 @@ cask "visual-studio-code"
 {{- if (dig "utils" "terraform" false .) }}
 brew "terraform-docs"
 brew "tenv"
-brew "tflint"
 {{- end }}
 {{- if (dig "utils" "wireguard" false .) }}
 brew "wireguard-tools"
