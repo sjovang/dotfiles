@@ -3,6 +3,10 @@
 
 export HOMEBREW_NO_ENV_HINTS=1
 
+if ! brew trust | grep -q "acsandmann/tap/rift"; then
+    brew trust --formula acsandmann/tap/rift
+fi
+
 {{- if (dig "utils" "terraform" false .) }}
 if ! brew trust | grep -q "terraform-linters/tap/tflint"; then
     brew trust --cask terraform-linters/tap/tflint
@@ -31,7 +35,6 @@ fi
 # Install packages
 brew bundle --file=/dev/stdin <<EOF
 {{ if eq .chezmoi.os "darwin" -}}
-brew "container"
 brew "direnv"
 brew "eza"
 brew "fzf"
@@ -51,6 +54,7 @@ brew "uv"
 brew "yq"
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
+brew "acsandmann/tap/rift"
 cask "bitwarden"
 cask "discord"
 cask "font-monaspace"
@@ -74,6 +78,7 @@ brew "azd"
 brew "azure-cli"
 {{- end }}
 {{- if (dig "utils" "kubernetes" false .) }}
+brew "container"
 brew "crossplane"
 brew "k9s"
 brew "kubectl"
