@@ -1,0 +1,40 @@
+[keys]
+"Alt + Z" = "toggle_space_activated"
+"Alt + H" = { move_focus = "left" }
+"Alt + J" = { move_focus = "down" }
+"Alt + K" = { move_focus = "up" }
+"Alt + L" = { move_focus = "right" }
+"Alt + Shift + H" = { move_node = "left" }
+"Alt + Shift + J" = { move_node = "down" }
+"Alt + Shift + K" = { move_node = "up" }
+"Alt + Shift + L" = { move_node = "right" }
+"Alt + Shift + Space" = "toggle_window_floating"
+
+[settings.layout]
+mode = "scrolling"
+
+[settings.layout.gaps.outer]
+top = 4.0
+left = 4.0
+bottom = 4.0
+right = 4.0
+
+[settings.layout.gaps.inner]
+horizontal = 8.0
+vertical = 8.0
+
+[settings.layout.scrolling]
+column_width_ratio = 0.6
+
+[settings.gestures]
+enabled = false
+fingers = 3
+skip_empty = false
+
+[settings.ui.menu_bar]
+enabled = true
+display_style = "layout"
+active_label = "index"
+
+[settings.ui.mission_control]
+enabled = true

@@ -1,0 +1,35 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+# rift version: {{ if lookPath "rift" }}{{ output "rift" "--version" | trim }}{{ end }}
+
+set -euo pipefail
+
+if ! command -v rift &>/dev/null; then
+    exit 0
+fi
+
+RIFT_BIN="$(command -v rift)"
+
+# Install the launchd service if it isn't already registered (label-agnostic check)
+if ! launchctl list 2>/dev/null | grep -qi 'rift'; then
+    rift service install
+fi
+
+rift service start || true
+
+# Best-effort check whether rift already has Accessibility access.
+# Reading TCC.db requires Full Disk Access for the calling process, so this
+# check may fail silently — that's fine, we just fall back to prompting.
+GRANTED=0
+if TCC_ROW=$(sqlite3 "$HOME/Library/Application Support/com.apple.TCC/TCC.db" \
+    "SELECT auth_value FROM access WHERE service='kTCCServiceAccessibility' AND client='$RIFT_BIN';" 2>/dev/null); then
+    [ "$TCC_ROW" = "2" ] && GRANTED=1
+fi
+
+if [ "$GRANTED" -ne 1 ]; then
+    echo "⚠️  rift needs Accessibility permission to manage windows."
+    echo "   Opening System Settings > Privacy & Security > Accessibility — please enable rift there."
+    open "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"
+    osascript -e 'display notification "Enable rift in Privacy & Security > Accessibility, then run: rift service restart" with title "rift setup"' &>/dev/null || true
+fi
+{{ end -}}

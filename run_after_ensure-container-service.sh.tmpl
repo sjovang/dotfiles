@@ -1,0 +1,22 @@
+{{- if (dig "utils" "kubernetes" false .) -}}
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+set -uo pipefail
+
+if ! command -v container &>/dev/null; then
+    exit 0
+fi
+
+# Register with brew services (RunAtLoad) so it restarts automatically at login.
+# This job exits right after bootstrapping the real apiserver launchd jobs, so
+# it always shows "stopped" once done — only register it if it isn't set up yet.
+if [ ! -f "$HOME/Library/LaunchAgents/sh.brew.container.plist" ]; then
+    brew services start container
+fi
+
+# Self-heal: make sure the apiserver is actually up right now
+if ! container system status 2>/dev/null | grep -q '^status *running'; then
+    container system start --disable-kernel-install || true
+fi
+{{ end -}}
+{{ end -}}
