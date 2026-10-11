@@ -14,10 +14,10 @@
 mode = "scrolling"
 
 [settings.layout.gaps.outer]
-top = 8.0
-left = 8.0
-bottom = 8.0
-right = 8.0
+top = 4.0
+left = 4.0
+bottom = 4.0
+right = 4.0
 
 [settings.layout.gaps.inner]
 horizontal = 8.0
@@ -25,10 +25,16 @@ vertical = 8.0
 
 [settings.layout.scrolling]
 column_width_ratio = 0.6
-alignment = "center"
-focus_navigation_style = "niri"
 
 [settings.gestures]
-enabled = true
-fingers = 4
+enabled = false
+fingers = 3
 skip_empty = false
+
+[settings.ui.menu_bar]
+enabled = true
+display_style = "layout"
+active_label = "index"
+
+[settings.ui.mission_control]
+enabled = true
